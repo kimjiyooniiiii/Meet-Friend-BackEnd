@@ -292,30 +292,22 @@ public class BoardService {
         scrapRepository.delete(scrap.get());
         return true;
     }
-
     @Transactional
     public List<ScrapResponse> getScrapBoard(UserInfo userinfo) {
-        // 자신이 한 scrap 정보들을 가져옴
-        // userScraps는 scrapId, userId, postId, createdAt을 가짐
-        List<UserScraps> userScraps = scrapRepository.findByUserId(userinfo);
-        List<ScrapResponse> scrapList  = new ArrayList<>();
 
-        for (UserScraps s : userScraps) {
+        List<Object[]> results = scrapRepository.findUserScrapsList(userinfo.getUserId());
+        List<ScrapResponse> scrapList = new ArrayList<>();
 
-            // for문마다 repository 새로 불러오는거 최적화 or 다른 방법 구상 필요!!
-            // join 해야하나 scrap이랑??
-            var post = boardRepository.findById(s.getPostId().getPostId()).orElseThrow(() -> new NullPointerException("존재하지 않는 게시글입니다."));
+        for (Object[] row : results) {
+            Long postId = (Long) row[0];
+            String userId = (String) row[1];
+            String title = (String) row[2];
+            String content = (String) row[3];
+            String writer = (String) row[4];
 
-            scrapList.add(
-                    ScrapResponse.builder()
-                            .postId(s.getPostId().getPostId())
-                            .userId(s.getUserId().getUserId())
-                            .title(post.getTitle())
-                            .content(post.getContent())
-                            .writer(post.getWriter())
-                            .build());
+            ScrapResponse scrap = new ScrapResponse(postId, userId, title, content, writer);
+            scrapList.add(scrap);
         }
-
         return scrapList;
     }
 }

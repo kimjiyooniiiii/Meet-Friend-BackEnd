@@ -1,15 +1,14 @@
 package com.knucapstone.rudoori.model.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScrapResponse {
@@ -20,4 +19,5 @@ public class ScrapResponse {
     private String title;
     private String content;
     private String writer;
+
 }
