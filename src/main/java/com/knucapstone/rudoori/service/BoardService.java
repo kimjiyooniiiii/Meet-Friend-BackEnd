@@ -67,28 +67,32 @@ public class BoardService {
     // 게시글과 댓글 열람
     @Transactional
     public BoardResponse getBoard(Long boardId) {
-        Posts post = boardRepository.findById(boardId).orElseThrow(NullPointerException::new);
+        Optional<Posts> post = boardRepository.findById(boardId);
 
-        Optional<Posts> post2 = boardRepository.findById(boardId);
+        if(post.isPresent()) {
+            Posts getPost = post.get();
 
-        // 해당 게시글의 댓글 모두 불러오기
-        List<Reply> replies = replyRepository.findAllByPost(post2);
+            // 해당 게시글의 댓글 모두 불러오기
+            List<Reply> replies = replyRepository.findAllByPost(post);
 
-        // 댓글 정렬하기
-        List<ReplyDto.ReplyGroup> groups = sortReply(boardId, replies);
+            // 댓글 정렬하기
+            List<ReplyDto.ReplyGroup> groups = sortReply(boardId, replies);
 
-        return BoardResponse
-                .builder()
-                .postId(post.getPostId())
-                .writer(post.getWriter())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likeCount(post.getLikeCount())
-                .dislikeCount(post.getDislikeCount())
-                .scrap(post.getScrap())
-                .createdDt(post.getCreatedDt())
-                .replyGroup(groups)
-                .build();
+            return BoardResponse
+                    .builder()
+                    .postId(getPost.getPostId())
+                    .writer(getPost.getWriter())
+                    .title(getPost.getTitle())
+                    .content(getPost.getContent())
+                    .likeCount(getPost.getLikeCount())
+                    .dislikeCount(getPost.getDislikeCount())
+                    .scrap(getPost.getScrap())
+                    .createdDt(getPost.getCreatedDt())
+                    .replyGroup(groups)
+                    .build();
+        } else {
+            throw new RuntimeException("찾는 게시글이 없습니다.");
+        }
     }
 
     // 댓글 묶음 받는 메소드
@@ -135,7 +139,6 @@ public class BoardService {
 
     @Transactional
     public BoardResponse updateBoard(Long boardId, BoardRequest boardRequest, UserInfo userinfo) throws Exception {
-
         var post = boardRepository.findById(boardId).orElseThrow(); // db 안에 저장된 값
         // boardRequest는 board를 수정 할 값들이 들어가있음 "title":"타이틀","body":"바디"
 
@@ -296,18 +299,22 @@ public class BoardService {
     public List<ScrapResponse> getScrapBoard(UserInfo userinfo) {
 
         List<Object[]> results = scrapRepository.findUserScrapsList(userinfo.getUserId());
-        List<ScrapResponse> scrapList = new ArrayList<>();
+        if(results.isEmpty()) {
+            List<ScrapResponse> scrapList = new ArrayList<>();
 
-        for (Object[] row : results) {
-            Long postId = (Long) row[0];
-            String userId = (String) row[1];
-            String title = (String) row[2];
-            String content = (String) row[3];
-            String writer = (String) row[4];
+            for (Object[] row : results) {
+                Long postId = (Long) row[0];
+                String userId = (String) row[1];
+                String title = (String) row[2];
+                String content = (String) row[3];
+                String writer = (String) row[4];
 
-            ScrapResponse scrap = new ScrapResponse(postId, userId, title, content, writer);
-            scrapList.add(scrap);
+                ScrapResponse scrap = new ScrapResponse(postId, userId, title, content, writer);
+                scrapList.add(scrap);
+            }
+            return scrapList;
+        } else {
+          throw new RuntimeException("아직 스크랩한 게시글이 없습니다.");
         }
-        return scrapList;
     }
 }
