@@ -27,12 +27,14 @@ public class SecurityConfig {
                 .csrf()
                 .disable() // CSRF 공격 방지 비활성화
 
+
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
+                //.requestMatchers("/auth/**")
+                .requestMatchers("/**")
                 .permitAll() // 빈 문자열("")에 대한 요청은 모든 사용자에게 허용
 
-                .anyRequest()
-                .authenticated() // 그 외의 요청은 인증된 사용자만 허용
+                //.anyRequest()
+                //.authenticated() // 그 외의 요청은 인증된 사용자만 허용
 
                 .and()
 
