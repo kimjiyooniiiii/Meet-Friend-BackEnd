@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -257,21 +256,6 @@ public class BoardService {
 
     }
 
-    // 게시글 키워드로 검색
-    public void searchByKeyword(LinkedHashMap<String, String> map) {
-        List<Posts> posts = new ArrayList<>();
-
-        for(String key : map.keySet()) {
-            List<Posts> search = boardRepository.findByKeywords(map.get(key), map.get(key));
-
-            if(search == null || search.isEmpty()) {
-                continue;
-            }else{
-                search.stream().forEach(p -> posts.add(p));
-            }
-        }
-        posts.stream().forEach(post -> System.out.println(post.getTitle() + ": " + post.getContent()));
-    }
 
     // 스크랩 --------------------------------------------------------------------
     @Transactional

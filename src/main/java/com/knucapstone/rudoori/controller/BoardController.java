@@ -3,7 +3,6 @@ package com.knucapstone.rudoori.controller;
 import com.knucapstone.rudoori.common.ApiResponse;
 import com.knucapstone.rudoori.model.dto.Board.BoardRequest;
 import com.knucapstone.rudoori.model.dto.Board.BoardResponse;
-import com.knucapstone.rudoori.model.dto.Board.SearchKeyword;
 import com.knucapstone.rudoori.model.dto.ReplyDto;
 import com.knucapstone.rudoori.model.dto.ScrapResponse;
 import com.knucapstone.rudoori.model.entity.UserInfo;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -80,19 +78,6 @@ public class BoardController {
         return ApiResponse.createSuccess(boardService.createChildReply(boardId, parentId, userInfo, request));
     }
 
-    // 키워드로 게시글 검색
-    @GetMapping("/searchByKeyword")
-    @ResponseBody   //json으로 바꿔줌
-    public ApiResponse<SearchKeyword> searchByKeyword(@RequestParam(required = false) LinkedHashMap<String, String> map){
-
-        boardService.searchByKeyword(map);
-
-        SearchKeyword searchKeyword = new SearchKeyword();
-        //searchKeyword.setKeywords(list);
-
-        return ApiResponse.createSuccess(searchKeyword);
-        // keyword 리스트를 순회하며 db에 일치하는 데이터 찾기
-    }
 
     // 스크랩------------------------------------------------------------------------------
     @PostMapping("/{boardId}/scrap")
