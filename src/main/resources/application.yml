@@ -17,13 +17,10 @@ spring:
   main:
     allow-circular-references: true
   data:
-
     redis:
       host: 121.187.22.37
       password: mypassword
-    mongodb:
-      host: 121.187.22.37
-      password: mypassword!
+      port: 6379
 
     mongodb:
       host: 121.187.22.37

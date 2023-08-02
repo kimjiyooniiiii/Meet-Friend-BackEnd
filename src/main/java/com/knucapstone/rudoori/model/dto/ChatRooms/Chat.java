@@ -1,5 +1,6 @@
 package com.knucapstone.rudoori.model.dto.ChatRooms;
 
+import com.google.gson.annotations.SerializedName;
 import com.knucapstone.rudoori.service.ChatService;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,56 +16,78 @@ public class Chat {
     public static class Room {
         private String roomId;
         private String name;
-        private Set<WebSocketSession> sessions = new HashSet<>();
-
-        @Builder
-        public Room(String roomId, String name) {
-            this.roomId = roomId;
-            this.name = name;
-        }
-
-        public void handleActions(WebSocketSession session, Chat.Message chatMessage, ChatService chatService) {
-            if (chatMessage.getType().equals(Chat.Message.MessageType.ENTER)) {
-                sessions.add(session);
-                chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
-            }
-            sendMessage(chatMessage, chatService);
-        }
-
-        public <T> void sendMessage(T message, ChatService chatService) {
-            sessions.parallelStream().forEach(session -> chatService.sendMessage(session, message));
-        }
-
-        }
+    }
     @Getter
     @Setter
-    public static class Message{
+    public class Message {
+        @SerializedName("type")
+        private String type;
 
-        public Message() {
+        @SerializedName("message")
+        private MessageContent messageContent;
+
+        @SerializedName("roomId")
+        private String roomId;
+
+        // 생성자, Getter, Setter 등 필요한 메서드를 추가할 수 있습니다.
+
+        // MessageContent 클래스는 message 객체 내의 내용을 나타내는 클래스입니다.
+        public static class MessageContent {
+            @SerializedName("_id")
+            private String messageId;
+
+            @SerializedName("text")
+            private String text;
+
+            @SerializedName("createdAt")
+            private String createdAt;
+
+            @SerializedName("user")
+            private User user;
+
+            // 생성자, Getter, Setter 등 필요한 메서드를 추가할 수 있습니다.
         }
 
-        @Builder
-        public Message(MessageType type, String roomId, String sender, String receiver, String message ,String timeLog) {
-            this.type = type;
-            this.roomId = roomId;
-            this.sender = sender;
-            this.receiver = receiver;
-            this.message = message;
-            this.timeLog = timeLog;
+        // User 클래스는 user 객체 내의 정보를 나타내는 클래스입니다.
+        public static class User {
+            @SerializedName("_id")
+            private String userId;
+
+            @SerializedName("name")
+            private String name;
+
+            @SerializedName("avatar")
+            private String avatarUrl;
+
+            // 생성자, Getter, Setter 등 필요한 메서드를 추가할 수 있습니다.
         }
-
-        // 메시지 타입 : 입장, 퇴장, 채팅
-
-        public enum MessageType {
-            INIT, ENTER, QUIT, TALK, URL, IMAGE, VIDEO
-        }
-
-
-        private MessageType type; // 메시지 타입
-        private String roomId; // 방번호
-        private String sender; // 메시지 보낸사람
-        private String receiver;    //메시지 받는사람
-        private String message; // 메시지
-        private String timeLog;
     }
+//    @Getter
+//    @Setter
+//    public static class Message{
+//
+//        private String _id;
+//        private String text;
+//        private String createdAt;
+//        private User user;
+//        private MessageType type; // 메시지 타입
+//        private String roomId; // 방번호
+//        private String message; // 메시지
+//
+//        @Setter
+//        @Getter
+//        public static class User {
+//            private String _id;
+//            private String name;
+//            private String avatar;
+//        }
+//
+//        // 메시지 타입 : 입장, 퇴장, 채팅
+////        INIT, ENTER, QUIT, TALK, URL, IMAGE, VIDEO
+//        public enum MessageType {
+//            IN, EN, QU, TA, UR, IM, VI
+//        }
+//
+//
+//    }
 }
