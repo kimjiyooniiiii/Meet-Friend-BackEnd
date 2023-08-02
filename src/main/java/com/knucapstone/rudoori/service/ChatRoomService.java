@@ -159,6 +159,7 @@ public class ChatRoomService {
         return response;
     }
 
-    // 키워드로 채팅 목록 검색
+    public void sendMessageToChatRoom(String roomId, String message) {
+    }
 
 }
