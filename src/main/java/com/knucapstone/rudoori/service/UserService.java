@@ -93,7 +93,7 @@ public class UserService {
         return User.UserInfoResponse
                 .builder()
                 .userId(user.getUserId())
-                .userName(user.getUsername())
+                .userName(user.getName())
                 .birthday(user.getBirthday())
                 .gender(user.getGender())
                 .nickName(user.getNickname())
