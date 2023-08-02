@@ -127,4 +127,8 @@ public class ChatRoomService {
 
         return response;
     }
+
+
+    public void sendMessageToChatRoom(String roomId, String message) {
+    }
 }

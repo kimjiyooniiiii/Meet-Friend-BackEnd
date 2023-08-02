@@ -2,6 +2,7 @@ server:
   port: 8000
 
 
+
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -16,6 +17,14 @@ spring:
   main:
     allow-circular-references: true
   data:
+
+    redis:
+      host: 121.187.22.37
+      password: mypassword
+    mongodb:
+      host: 121.187.22.37
+      password: mypassword!
+
     mongodb:
       host: 121.187.22.37
       port: 9999
@@ -23,6 +32,7 @@ spring:
       username: mongouser
       password: mypassword
       database: RUDoori
+
 jwt:
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
   #key size (512bit)
@@ -33,4 +43,6 @@ jwt:
 
 # 로그 파일의 경로와 이름을 지정
 logging:
-  file: /com/knucapstone/rudoori
+
+  level:
+    com.knucapstone.rudoori.controller: DEBUG
