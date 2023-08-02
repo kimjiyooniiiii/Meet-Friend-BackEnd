@@ -65,4 +65,8 @@ public class ChatRoomService {
         }
         return roomList;
     }
+
+
+    public void sendMessageToChatRoom(String roomId, String message) {
+    }
 }
