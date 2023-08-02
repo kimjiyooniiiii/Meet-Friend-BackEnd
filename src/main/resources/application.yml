@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8000
 
 
 spring:
@@ -15,6 +15,14 @@ spring:
     show-sql: true
   main:
     allow-circular-references: true
+  data:
+    mongodb:
+      host: 121.187.22.37
+      port: 9999
+      authentication-database: admin
+      username: mongouser
+      password: mypassword
+      database: RUDoori
 jwt:
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
   #key size (512bit)
@@ -23,6 +31,6 @@ jwt:
   expiration: 86400000	# 1 day
   refresh-expiration: 604800000 #7days
 
+# 로그 파일의 경로와 이름을 지정
 logging:
-  level:
-    com.knucapstone.rudoori.controller: DEBUG
+  file: /com/knucapstone/rudoori
