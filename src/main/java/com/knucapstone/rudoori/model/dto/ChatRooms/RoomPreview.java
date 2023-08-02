@@ -2,19 +2,19 @@ package com.knucapstone.rudoori.model.dto.ChatRooms;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SearchRoomResponse {
+@Getter
+@Setter
+public class RoomPreview {
 
+    private String _id;
     private String roomName;
     private String introduce;
-    private String createdDt;
-
-    //private List<Reply> replies = new ArrayList<>();
+    private int maxParticipants;
+    private LocalDateTime createdAt;
 }

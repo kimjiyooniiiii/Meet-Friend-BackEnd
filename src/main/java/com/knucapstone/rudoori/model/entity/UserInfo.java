@@ -57,6 +57,10 @@ public class UserInfo implements UserDetails{
         return userId;
     }
 
+    public String getName(){
+        return name;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;    //true가 아니면 연결이 안됨
