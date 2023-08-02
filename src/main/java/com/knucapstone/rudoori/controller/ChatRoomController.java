@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -16,25 +17,6 @@ import java.util.List;
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
-
-
-//    // 방 만들기
-//    @PostMapping("/create")
-//    public void createRoom(@RequestBody RoomRequest createRequest) {
-//        chatRoomService.createRoom(createRequest);
-//
-//    }
-//
-//    // 밥 모임 검색
-//    @GetMapping("/searchMeal")
-//    @ResponseBody   //json으로 바꿔줌
-//    public List<SearchRoomResponse> searchMealByKeyword(@RequestParam(required = false) LinkedHashMap<String, String> map){
-//
-//        List<SearchRoomResponse> roomList = chatRoomService.searchMealByKeyword(map);
-//
-//        return roomList;
-//        // keyword 리스트를 순회하며 db에 일치하는 데이터 찾기
-//    }
 
     // 채팅방 생성
     @PostMapping("/create")
@@ -61,12 +43,20 @@ public class ChatRoomController {
         return ApiResponse.createSuccess(response);
     }
 
+    // 메시지 생성
+    @PostMapping("/newMessage")
+    public ApiResponse<MessageResponse> sendMessage(@RequestParam("roomId") String roomId, @RequestBody MessageRequest request, @AuthenticationPrincipal UserInfo user) {
+        MessageResponse response = chatRoomService.sendMessage(request, user, roomId);
+        return ApiResponse.createSuccess(response);
+    }
+
     // 채팅방 입장완료
     @GetMapping("/entered")
-    public ApiResponse<List<MessageResponse>> enteredRoom(@RequestParam("roomId") String roomId) {
+    public ApiResponse<EnteredRoomResponse> enteredRoom(@RequestParam("roomId") String roomId) {
 
-        List<MessageResponse> response = chatRoomService.enteredRoom(roomId);
+        EnteredRoomResponse response = chatRoomService.enteredRoom(roomId);
 
         return ApiResponse.createSuccess(response);
     }
+
 }

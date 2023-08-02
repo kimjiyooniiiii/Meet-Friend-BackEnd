@@ -3,17 +3,13 @@ package com.knucapstone.rudoori.service;
 import com.knucapstone.rudoori.model.dto.ChatRooms.*;
 import com.knucapstone.rudoori.model.entity.ChatMessage;
 import com.knucapstone.rudoori.model.entity.ChatRoom;
-import com.knucapstone.rudoori.model.dto.ChatRooms.RoomWithMessages;
 import com.knucapstone.rudoori.model.entity.UserInfo;
 import com.knucapstone.rudoori.repository.ChatMessageRepository;
 import com.knucapstone.rudoori.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.LookupOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +31,7 @@ public class ChatRoomService {
                 .roomName(request.getRoomName())
                 .introduce(request.getIntroduce())
                 .maxParticipants(request.getMaxParticipants())
+                .blockedMember(new ArrayList<>())
                 .isFull(false)
                 .build();
 
@@ -48,7 +45,6 @@ public class ChatRoomService {
                 .blockedMember(chatRoom.getBlockedMember())
                 .maxParticipants(chatRoom.getMaxParticipants())
                 .introduce(chatRoom.getIntroduce())
-                .createdAt(chatRoom.getCreatedAt())
                 .build();
 
         return response;
@@ -77,15 +73,31 @@ public class ChatRoomService {
     // 채팅 메시지 생성
     public MessageResponse sendMessage(MessageRequest request, UserInfo user, String roomId) {
 
+        ChatMessage.SendUser sendUser = ChatMessage.SendUser.builder()
+                ._id(user.getUserId())
+                .name(user.getName())
+                .build();
+
+        ChatMessage.Data data = ChatMessage.Data.builder()
+                .content(request.getContent())
+                ._id(LocalDateTime.now().toString())
+                .user(sendUser)
+                .build();
+
         ChatMessage message = ChatMessage.builder()
                 .chatRoomId(roomId)
                 .createdBy(user.getUserId())
+                .data(data)
                 .build();
 
         messageRepository.insert(message);
 
         MessageResponse response = MessageResponse.builder()
-
+                ._id(message.get_id())
+                .chatRoomId(message.getChatRoomId())
+                .createdBy(message.getCreatedBy())
+                .content(message.getData().getContent())
+                .createdAt(message.getCreatedAt())
                 .build();
 
         return response;
@@ -109,22 +121,44 @@ public class ChatRoomService {
     }
 
     // 채팅방 입장완료
-    public List<MessageResponse> enteredRoom(String chatRoomId) {
+    public EnteredRoomResponse enteredRoom(String chatRoomId) {
 
+        Optional<ChatRoom> room = chatRoomRepository.findById(chatRoomId);
         List<ChatMessage> messageList = messageRepository.findAllByChatRoomId(chatRoomId);
 
-        List<MessageResponse> response = new ArrayList<>();
+        RoomResponse roomResponse = RoomResponse.builder()              // 방 정보
+                ._id(room.get().get_id())
+                .roomName(room.get().getRoomName())
+                .createdAt(room.get().getCreatedAt())
+                .blockedMember(room.get().getBlockedMember())
+                .maxParticipants(room.get().getMaxParticipants())
+                .introduce(room.get().getIntroduce())
+                .participants(room.get().getParticipants())
+                .isFull(room.get().isFull())
+                .build();
+
+        List<MessageResponse> messageResponses = new ArrayList<>();     // 메시지 목록
 
         for(ChatMessage m : messageList) {
             MessageResponse r = MessageResponse.builder()
                     .chatRoomId(m.getChatRoomId())
+                    .avatar(m.getData().getUser().getAvatar())
+                    .content(m.getData().getContent())
                     ._id(m.get_id())
                     .createdBy(m.getCreatedBy())
                     .createdAt(m.getCreatedAt())
                     .build();
-            response.add(r);
+            messageResponses.add(r);
         }
+
+        EnteredRoomResponse response = EnteredRoomResponse.builder()
+                .roomResponse(roomResponse)
+                .messageResponse(messageResponses)
+                .build();
 
         return response;
     }
+
+    // 키워드로 채팅 목록 검색
+
 }

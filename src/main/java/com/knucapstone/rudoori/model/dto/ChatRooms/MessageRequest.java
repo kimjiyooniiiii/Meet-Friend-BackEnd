@@ -9,19 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 public class MessageRequest {
-    private String chatRoom_id;
-    private String createdBy;
-    private ChatMessage.Data data;
 
-    public static class Data {
-        private String _id;     // ${Date.now()}
-        private String content;
-        private ChatMessage.SendUser user;
-    }
+    private String content;
 
-    public static class SendUser {
-        private String _id;     // userId
-        private String name;
-        private String avatar;
-    }
 }

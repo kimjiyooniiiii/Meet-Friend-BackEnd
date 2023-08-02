@@ -19,4 +19,5 @@ public class RoomResponse {
     private int maxParticipants;
     private List<String> blockedMember;
     private LocalDateTime createdAt;
+    private boolean isFull;
 }
