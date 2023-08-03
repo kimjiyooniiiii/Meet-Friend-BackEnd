@@ -11,9 +11,7 @@ import java.time.LocalDateTime;
 public class MessageResponse {
     private String _id;
     private String chatRoomId;
-    private String createdBy;
-    private LocalDateTime createdAt;
-        private String content;
-        private String avatar;
+    private String createdAt;      // 방 생성일
+    private String data;
 
 }

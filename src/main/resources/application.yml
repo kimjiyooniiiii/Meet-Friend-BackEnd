@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 8888
 
 
 
@@ -21,9 +21,6 @@ spring:
     redis:
       host: 121.187.22.37
       password: mypassword
-    mongodb:
-      host: 121.187.22.37
-      password: mypassword!
 
     mongodb:
       host: 121.187.22.37

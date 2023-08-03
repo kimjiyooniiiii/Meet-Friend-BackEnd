@@ -71,23 +71,12 @@ public class ChatRoomService {
     }
 
     // 채팅 메시지 생성
-    public MessageResponse sendMessage(MessageRequest request, UserInfo user, String roomId) {
-
-        ChatMessage.SendUser sendUser = ChatMessage.SendUser.builder()
-                ._id(user.getUserId())
-                .name(user.getName())
-                .build();
-
-        ChatMessage.Data data = ChatMessage.Data.builder()
-                .content(request.getContent())
-                ._id(LocalDateTime.now().toString())
-                .user(sendUser)
-                .build();
+    public MessageResponse sendMessage(MessageRequest request, String roomId) {
 
         ChatMessage message = ChatMessage.builder()
                 .chatRoomId(roomId)
-                .createdBy(user.getUserId())
-                .data(data)
+                .createdAt(chatRoomRepository.findById(roomId).toString())
+                .data((String) request.getData())
                 .build();
 
         messageRepository.insert(message);
@@ -95,9 +84,8 @@ public class ChatRoomService {
         MessageResponse response = MessageResponse.builder()
                 ._id(message.get_id())
                 .chatRoomId(message.getChatRoomId())
-                .createdBy(message.getCreatedBy())
-                .content(message.getData().getContent())
-                .createdAt(message.getCreatedAt())
+                .createdAt(message.getCreatedAt())            // 방 생성일
+                .data(message.getData())
                 .build();
 
         return response;
@@ -142,10 +130,8 @@ public class ChatRoomService {
         for(ChatMessage m : messageList) {
             MessageResponse r = MessageResponse.builder()
                     .chatRoomId(m.getChatRoomId())
-                    .avatar(m.getData().getUser().getAvatar())
-                    .content(m.getData().getContent())
                     ._id(m.get_id())
-                    .createdBy(m.getCreatedBy())
+                    .data(m.getData())
                     .createdAt(m.getCreatedAt())
                     .build();
             messageResponses.add(r);
@@ -157,6 +143,30 @@ public class ChatRoomService {
                 .build();
 
         return response;
+    }
+
+    // 키워드로 채팅방 검색
+    public List<RoomResponse> searchRoomByKeyword(SearchRoomRequest request) {
+        String[] keywords = request.getKeywordList();
+        List<ChatRoom> result = chatRoomRepository.searchByKeyword(keywords);
+
+        List<RoomResponse> responseList = new ArrayList<>();
+        for(ChatRoom c : result) {
+            RoomResponse response = RoomResponse.builder()
+                    ._id(c.get_id())
+                    .roomName(c.getRoomName())
+                    .isFull(c.isFull())
+                    .participants(c.getParticipants())
+                    .introduce(c.getIntroduce())
+                    .maxParticipants(c.getMaxParticipants())
+                    .blockedMember(c.getBlockedMember())
+                    .createdAt(c.getCreatedAt())
+                    .build();
+
+            responseList.add(response);
+        }
+
+        return responseList;
     }
 
     public void sendMessageToChatRoom(String roomId, String message) {

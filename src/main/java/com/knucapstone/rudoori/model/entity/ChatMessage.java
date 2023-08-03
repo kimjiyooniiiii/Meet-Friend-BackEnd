@@ -20,33 +20,7 @@ public class ChatMessage {
     @Id
     private String _id;
     private String chatRoomId;
-    private String createdBy;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    private Data data;
-
-    @Getter
-    @Setter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Data {
-        private String _id;     // ${Date.now()}
-        private String content;
-        @CreatedDate
-        private LocalDateTime createdAt;
-        private SendUser user;
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class SendUser {
-        private String _id;     //userId
-        private String name;
-        private String avatar;
-    }
+    private String createdAt;       // 방 생성일
+    private String data;
 
 }

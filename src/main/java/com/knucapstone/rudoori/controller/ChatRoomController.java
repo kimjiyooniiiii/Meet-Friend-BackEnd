@@ -7,8 +7,6 @@ import com.knucapstone.rudoori.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -45,8 +43,8 @@ public class ChatRoomController {
 
     // 메시지 생성
     @PostMapping("/newMessage")
-    public ApiResponse<MessageResponse> sendMessage(@RequestParam("roomId") String roomId, @RequestBody MessageRequest request, @AuthenticationPrincipal UserInfo user) {
-        MessageResponse response = chatRoomService.sendMessage(request, user, roomId);
+    public ApiResponse<MessageResponse> sendMessage(@RequestParam("roomId") String roomId, @RequestBody MessageRequest request) {
+        MessageResponse response = chatRoomService.sendMessage(request, roomId);
         return ApiResponse.createSuccess(response);
     }
 
@@ -57,6 +55,17 @@ public class ChatRoomController {
         EnteredRoomResponse response = chatRoomService.enteredRoom(roomId);
 
         return ApiResponse.createSuccess(response);
+    }
+
+    // 키워드로 채팅방 검색
+    @PostMapping("/searchRoom")
+    @ResponseBody   //json으로 바꿔줌
+    public ApiResponse<List<RoomResponse>> searchRoomByKeyword(@RequestBody SearchRoomRequest request) {
+
+        List<RoomResponse> responseList = chatRoomService.searchRoomByKeyword(request);
+
+
+        return ApiResponse.createSuccess(responseList);
     }
 
 }
