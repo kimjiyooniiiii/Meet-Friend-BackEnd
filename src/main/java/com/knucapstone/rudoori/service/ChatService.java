@@ -33,16 +33,6 @@ public class ChatService {
         return chatRooms.get(roomId);
     }
 
-    public Chat.Room createRoom(String name) {
-        String randomId = UUID.randomUUID().toString();
-        Chat.Room chatRoom = Chat.Room.builder()
-                .roomId(randomId)
-                .name(name)
-                .build();
-        chatRooms.put(randomId, chatRoom);
-        return chatRoom;
-    }
-
     public <T> void sendMessage(WebSocketSession session, T message) {
         try {
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
