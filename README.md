@@ -1,83 +1,52 @@
-# RUDoori-Backend (친구 만들기 앱 프로젝트)
+<img width="974" alt="image" src="https://github.com/kimjiyooniiiii/RUDoori-BackEnd/assets/117561820/0f5130b9-cdc3-4da5-a046-f7f560d010c7">
+
+<br><br>
+
+- **개발 목표 :** 대학교 내에서 같이 밥 먹을 친구를 구하는 커뮤니티 앱
+
+- **기간 :** 2023.04 ~ 2023.07 (3개월)
+
+- **인원 :** Full-Stack 4명
+
+- **개발 도구**
+   - **Back-End :** Java 17 / Spring boot 3.0.5 / Spring Security 6.0.2 / Spring Data JPA / Web Socket / MariaDB / MongoDB
+
+   - **Front-End :** React-native 0.71.8 / Expo
 
 <br>
 
-#### 💡 주제 : 많은 학생수를 보유한 강원대학교에서 낯선 환경의 학우들이 같이 공부하고 운동하고 밥먹을 친구를 구할 수 있는 앱
-- **Backend :** Spring boot, Spring Security
-- **Frontend :** React-native
+### 👨‍💻 담당 역할
+
+- 빈번한 삽입, 검색이 필요한 채팅의 특징을 고려해, MongoDB Setting 및 Collection 설계
+
+- 자기 참조 관계를 사용해 댓글, 대댓글 Entity 생성, “댓글 작성 API” 개발.
+- 여러 개의 키워드를 입력 받아, “채팅 방 검색” 기능 구현
+- 회원, 게시판 관련 ERD 설계
+- 채팅 방 “생성, 입장, 검색” Front-End, Back-End 개발
+
+
+<br><br>
+
+## 🗺 설계
+<img width="989" alt="image" src="https://github.com/kimjiyooniiiii/RUDoori-BackEnd/assets/117561820/7229e95b-3610-454f-bcce-0b06de78be73">
+
+<br><br>
+
+### ✔ ERD
+<img width="961" alt="image" src="https://github.com/kimjiyooniiiii/RUDoori-BackEnd/assets/117561820/1fddc1f1-5d9d-4766-845e-7aa8f7b64be1">
 
 <br>
 
-#### 📚 여기는 Backend 개발의 기록입니다!
+### ✔ API 명세서
+[구글 시트 바로가기](https://docs.google.com/spreadsheets/d/1mL3smyN01zIE6rOMr9rXbT50z6Xlga6DJ7jdkdAPkvg/edit#gid=0)
 
+<br><br><br>
 
-- 🖥 **프레임워크 :** Spring boot 3.0.5, Spring Security
-  
-- ⚙ **패키지 관리자 :** Gradle
-
-- 📲 **Use :** Restful API
-
-<br><br>
-
-## 규칙
-- 1 작업 1 커밋
-- 각각의 수정된 코드 주석 작성 및 수정 일자, 수정자 이름 작성
-- 작업 후 스프레드 시트 수정 필수
+## 📱 앱 화면
+#### ✔ 모임 생성
+<img width="974" alt="image" src="https://github.com/kimjiyooniiiii/RUDoori-BackEnd/assets/117561820/91a1cd7a-76ee-44c3-942b-0b828debdd8d">
 
 <br><br>
 
-## commit 메시지 참고사항
-- FEAT : 새로운 기능의 추가
-- FIX: 버그 수정
-- DOCS: 문서 수정
-- STYLE: 스타일 관련 기능(코드 포맷팅, 세미콜론 누락, 코드 자체의 변경이 없는 경우)
-- REFACTOR: 코드 리펙토링
-- TEST: 테스트 코트, 리펙토링 테스트 코드 추가
-- CHORE: 빌드 업무 수정, 패키지 매니저 수정(ex .gitignore 수정 같은 경우)
-
-  <br><br>
-
-## :exclamation: 주의사항
-- main branch push 금지
-- 각자 branch 위치만 사용
-- <b>작업 후 공용 스프레드 시트 수정</b>
-```
-https://docs.google.com/spreadsheets/d/16sM6Ys2sdX6XfJ24DwlpQ8nKQ-M5O-r3yLUhIxicAmE/edit#gid=0
-```
-- merge 절대 금지
-- compile error 상태로 commit 금지
-- .gitignore 설정
-```
-https://www.toptal.com/developers/gitignore
-```
-
-<br><br>
-
-## :star: git 명령어
-
-- <b>clone : github → local</b>
-``` 
-git clone https://github.com/star-moon-cloud-k/RUDoori-.git
-```
-- <b>branch 이름 확인
-```
-git branch
-```
-- <b>branch 이동
-```
-git branch -M <branch 이름>
-```
-- <b>동기화 : github → local</b>
-```
-git pull
-```
-- <b>push : local → github</b>
-```
-git add .
-```
-```
-git commit -m "메시지"
-```
-```
-git push
-```
+#### ✔ 카테고리 / 키워드로 모임 검색
+<img width="1022" alt="image" src="https://github.com/kimjiyooniiiii/RUDoori-BackEnd/assets/117561820/417b4caa-695e-440d-92c4-2aaa791d7d28">
